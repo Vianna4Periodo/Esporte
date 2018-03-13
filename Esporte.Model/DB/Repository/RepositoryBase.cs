@@ -34,7 +34,7 @@ namespace Esporte.Model.DB.Repository
             }
         }
 
-        public T SaveOrUpdate(T entity)
+        public T Save(T entity)
         {
             try
             {
@@ -42,7 +42,26 @@ namespace Esporte.Model.DB.Repository
 
                 var transaction = Session.BeginTransaction();
 
-                Session.SaveOrUpdate(entity);
+                Session.Save(entity);
+
+                transaction.Commit();
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Cannot Save. Error: ", ex);
+            }
+        }
+
+        public T Update(T entity)
+        {
+            try
+            {
+                Session.Clear();
+
+                var transaction = Session.BeginTransaction();
+
+                Session.Update(entity);
 
                 transaction.Commit();
                 return entity;

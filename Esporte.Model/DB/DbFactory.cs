@@ -1,4 +1,6 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Esporte.Model.DB.Model;
+using Esporte.Model.DB.Repository;
+using MySql.Data.MySqlClient;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
@@ -8,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -18,12 +21,12 @@ namespace Esporte.Model.DB
     {
         private static DbFactory _instance = null;
         private ISessionFactory _sessionFactory;
-        //public RepositoryPessoa RepositoryPessoa { get; set; }
+        public EsporteRepository EsporteRepository { get; set; }
         private DbFactory()
         {
             Connection();
 
-            //RepositoryPessoa = new RepositoryPessoa(Session);
+            EsporteRepository = new EsporteRepository(Session);
         }
 
         public static DbFactory Instance
@@ -44,8 +47,8 @@ namespace Esporte.Model.DB
             try
             {
                 var server = "localhost";
-                var port = "3306";
-                var dbName = "db_agenda";
+                var port = "3366";
+                var dbName = "db_sport";
                 var user = "root";
                 var psw = "root";
                 var stringConnection = "Persist Security Info=False;" +
@@ -158,9 +161,9 @@ namespace Esporte.Model.DB
                 //retorna todos as classes herdadas de ClassMapping, basta colocar uma classe qualquer como parametro
                 //do método typeof()
 
-                //mapper.AddMappings(
-                //    Assembly.GetAssembly(typeof(PessoaMap)).GetTypes()
-                //);
+                mapper.AddMappings(
+                    Assembly.GetAssembly(typeof(SportMap)).GetTypes()
+                );
                 return mapper.CompileMappingForAllExplicitlyAddedEntities();
             }
             catch (Exception ex)
