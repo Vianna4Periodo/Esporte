@@ -19,15 +19,40 @@ namespace Esporte.Controllers
 
         public ActionResult Create()
         {
-            return View();
+            var s = new Sport();
+            return View(s);
         }
 
-        public ActionResult PersistPearson(Sport p)
+        public ActionResult Edit(Guid id)
         {
-            p.DataCadastro = DateTime.Now;
-            DbFactory.Instance.EsporteRepository.Save(p);
-            return RedirectToAction("Index");
+            var s = DbFactory.Instance.EsporteRepository.FindById(id);
+            return View("Create", s);
         }
+
+        public ActionResult PersistPearson(Sport p, Guid id)
+        {
+            Sport s;
+            if(DbFactory.Instance.EsporteRepository.FindById(p.Id) == null)
+            {
+                s = new Sport()
+                {
+                    DataCadastro = DateTime.Now,
+                    Nome = p.Nome,
+                    Descricao = p.Descricao,
+                    IsIndividual = p.IsIndividual
+                };                                
+            }
+            else
+            {
+                s = DbFactory.Instance.EsporteRepository.FindById(p.Id);
+                s.Descricao = p.Descricao;
+                s.Nome = p.Nome;
+                s.IsIndividual = p.IsIndividual;
+            }
+            
+            DbFactory.Instance.EsporteRepository.SaveOrupdate(s);
+            return RedirectToAction("Index");
+        }        
 
         public ActionResult Search(String edtSearch)
         {

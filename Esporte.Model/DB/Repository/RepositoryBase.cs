@@ -34,7 +34,7 @@ namespace Esporte.Model.DB.Repository
             }
         }
 
-        public T Save(T entity)
+        public T SaveOrupdate(T entity)
         {
             try
             {
@@ -42,7 +42,7 @@ namespace Esporte.Model.DB.Repository
 
                 var transaction = Session.BeginTransaction();
 
-                Session.Save(entity);
+                Session.SaveOrUpdate(entity);
 
                 transaction.Commit();
                 return entity;
@@ -51,26 +51,7 @@ namespace Esporte.Model.DB.Repository
             {
                 throw new Exception("Cannot Save. Error: ", ex);
             }
-        }
-
-        public T Update(T entity)
-        {
-            try
-            {
-                Session.Clear();
-
-                var transaction = Session.BeginTransaction();
-
-                Session.Update(entity);
-
-                transaction.Commit();
-                return entity;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Cannot delete. Error: ", ex);
-            }
-        }
+        }        
 
         public IList<T> FindAll()
         {
